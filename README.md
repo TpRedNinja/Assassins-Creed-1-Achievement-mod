@@ -49,11 +49,40 @@ Assassin's Creed is a trademark of Ubisoft. This mod is a fan project and is not
 
 ## How it works
 
-See `ac1ach.c` (it is commented) and the reverse engineering notes. In short: a vtable pointer of `XenonAccomplishmentOutput` (empty on PC) receives the completed accomplishment; the popup is built with the game's own message constructor, the picture pixels are swapped into the flag texture when the game registers it, and the popup is only shown in Altair gameplay. The Defender fix changes how the game posts the "free mission done" event so that every rescue counts as its own entry (and corrects rescues made before the mod).
+In short: a vtable pointer of `XenonAccomplishmentOutput` (empty on PC) receives the completed accomplishment; the popup is built with the game's own message constructor, the picture pixels are swapped into the flag texture when the game registers it, and the popup is only shown in Altair gameplay. The Defender fix changes how the game posts the "free mission done" event so that every rescue counts as its own entry (and corrects rescues made before the mod).
+
+### Source layout
+
+All code is in `AC1Ach-src/src/`. `ac1ach.h` declares everything the files share, and every function has a one-line comment saying what it does.
+
+| File | What it does |
+| --- | --- |
+| `main.c` | `DllMain` (entry point) and the thread that installs the hooks once the game is ready |
+| `addresses.c` | The game addresses for the DX10 and DX9 exe, and `select_build()` which picks the set |
+| `patch.c` | Helpers that write hooks into the running game (pointer patch, code jump) |
+| `hooks.c` | The functions the game calls into: per-frame `pump()`, the is-active check, the achievement-unlocked notification |
+| `gate.c` | Is the player in Altair gameplay (not in a menu, loading or the modern day)? |
+| `popup.c` | Builds the game's own popup message with our title, description and picture, and starts the sound |
+| `picture.c` | png/jpg/bmp/tga to the 512x256 BC2 pixels the game uses |
+| `texture_swap.c` | Swaps the picture into the game's flag texture (and the hook that does it at the right moment) |
+| `earned.c` | Which achievements the save has earned, `earned.txt`, the popup queue and the F11/F12 replays |
+| `saves.c` | Per-save history folders and cleanup of deleted saves |
+| `defender.c` | The Defender of the People fix |
+| `config.c` | `AC1Ach.ini` and the hotkeys |
+| `achievement_text.c` | Default titles and descriptions |
+| `state.c` | The shared runtime state |
+| `util.c` | Logging and safe memory reads/writes |
+
+### Flow
+
+1. `main.c`: the .asi loads, finds its `AC1Ach` folder, and `init_thread` waits for the game, picks DX9/DX10 addresses and installs the hooks.
+2. `hooks.c`: the game then calls `hook_update` every frame (`pump`) and `hook_unlock` when an achievement completes, which queues a popup.
+3. `pump` waits until `gate.c` says the player is in gameplay, then `popup.c` shows the next queued popup; `picture.c` and `texture_swap.c` put the picture in, and the sound plays.
+4. `earned.c` and `saves.c` keep the per-save history; `defender.c` fixes the Defender achievements.
 
 ## Build
 
-`build.sh` or `build.bat` (32-bit MinGW-w64).
+`AC1Ach-src/build.sh` or `AC1Ach-src/build.bat` (32-bit MinGW-w64). It compiles every file in `AC1Ach-src/src/` into `AC1Ach.asi`.
 
 ## Licence
 
