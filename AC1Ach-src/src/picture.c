@@ -83,7 +83,7 @@ static uint8_t* build_picture(const char* path) {
 // Finds the picture for an achievement (the ini name, else Pictures\NN.png) and returns it ready for the game, or NULL.
 uint8_t* load_slot_picture(int slot) {
   char sec[8], name[MAX_PATH], path[MAX_PATH]; snprintf(sec, sizeof sec, "%02d", slot);
-  ini_get(sec, "Picture", "", name, sizeof name);
+  lang_get(sec, "Picture", "", name, sizeof name);
   static const char* ext[] = { "png", "jpg", "jpeg", "bmp", "tga" };
   if (name[0]) { snprintf(path, sizeof path, "%sPictures\\%s", g_mod, name); uint8_t* r = build_picture(path); if (r) return r; }
   for (int i = 0; i < 5; i++) { snprintf(path, sizeof path, "%sPictures\\%02d.%s", g_mod, slot, ext[i]); uint8_t* r = build_picture(path); if (r) return r; }

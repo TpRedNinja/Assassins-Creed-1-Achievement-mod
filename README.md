@@ -4,6 +4,7 @@ Restores the 44 leftover console achievements of Assassin's Creed (2007, PC) as 
 
 - Works in both the DX10 (`AssassinsCreed_Dx10.exe`) and the DX9 (`AssassinsCreed_Dx9.exe`) executable. The mod detects which one it is in. Every hooked address is checked before anything is written; in any other executable the mod stays idle and says so in its log.
 - Achievements are tracked per save: every save has its own earned and shown history, so you can earn them again on a new save.
+- Texts in English, Spanish, French, German, Italian, Russian and Polish; the mod picks the game's own language automatically (`Language=auto`) and it can be overridden in the ini.
 - Everything is editable: titles and descriptions (translations), pictures and sounds. See `SETTINGS.md`.
 - Also fixes the three **Defender of the People** achievements (Acre, Jerusalem, Damascus), which never completed in the PC game.
 
@@ -18,9 +19,10 @@ This mod was made with AI. The reverse engineering of the game and the code were
    - `Scripts\AC1Ach.asi`
    - `Scripts\AC1Ach\Pictures\00.png` to `44.png`
    - `Scripts\AC1Ach\Sounds\` (the `.wav` files)
+   - `Scripts\AC1Ach\Languages\` (the texts, one `.ini` per language)
 
    If you do not want a `Scripts` folder, `AC1Ach.asi` and the `AC1Ach` folder can also sit together in the game folder. The `AC1Ach` folder must always be next to `AC1Ach.asi`.
-3. Start the game and play. `Scripts\AC1Ach\AC1Ach.ini` is created on the first run, and `AC1Ach.log` is written next to it.
+3. Start the game and play. `Scripts\AC1Ach\AC1Ach.ini` (the settings) is created on the first run, and `AC1Ach.log` is written next to it.
 
 Uninstall: delete `AC1Ach.asi` and the `AC1Ach` folder.
 
@@ -39,8 +41,9 @@ Only in Altair gameplay: not in menus, loading screens, the pause menu or the mo
 ## Credits and sources
 
 - **Mod, reverse engineering:** TpRedNinja (also known as TpRedninja, TopRedNinja, NotTpRedNinja and NotTopRedNinja), with Claude (AI, Anthropic).
-- **Achievement pictures, titles and descriptions:** sourced from [TrueAchievements](https://www.trueachievements.com/game/Assassins-Creed/achievements).
-- **Picture of the extra achievement ("Nothing is True, Everything is Permitted"):** made with ChatGPT (AI).
+- **Achievement pictures, titles and descriptions:** the artwork and text are © Ubisoft (from the Xbox 360 version of the game), obtained via [TrueAchievements](https://www.trueachievements.com/game/Assassins-Creed/achievements).
+- **Picture of the extra achievement ("Nothing is True, Everything is Permitted"):** an Assassin's Creed wallpaper (Ubisoft artwork) from [wallpaperaccess.com](https://wallpaperaccess.com/assassin039s-creed-1), cropped to a square.
+- **Translations:** Spanish, French and Polish are the Xbox 360 texts as listed on the Assassin's Creed wikis on Fandom (Animuspedia for Spanish), CC BY-SA 3.0, with the source URL in the header of each file. These files, as adaptations, are shared under the same CC BY-SA 3.0 licence. German, Italian and Russian are machine translations (Google Translate) of the English text and have not been checked by native speakers.
 - **Sounds:** taken from [myinstants.com](https://www.myinstants.com), [101soundboards.com](https://www.101soundboards.com) and [zedge.net](https://www.zedge.net); MP3 files were converted to WAV with [freeconvert.com](https://www.freeconvert.com).
 - **Blox:** help with the save file format (the notes refer to it).
 - `stb_image.h` by Sean Barrett (public domain / MIT) reads the picture files.
@@ -68,7 +71,7 @@ All code is in `AC1Ach-src/src/`. `ac1ach.h` declares everything the files share
 | `earned.c` | Which achievements the save has earned, `earned.txt`, the popup queue and the F11/F12 replays |
 | `saves.c` | Per-save history folders and cleanup of deleted saves |
 | `defender.c` | The Defender of the People fix |
-| `config.c` | `AC1Ach.ini` and the hotkeys |
+| `config.c` | `AC1Ach.ini`, the language files and the hotkeys |
 | `achievement_text.c` | Default titles and descriptions |
 | `state.c` | The shared runtime state |
 | `util.c` | Logging and safe memory reads/writes |

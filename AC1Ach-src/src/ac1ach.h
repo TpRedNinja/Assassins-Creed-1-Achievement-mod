@@ -49,7 +49,7 @@ extern uintptr_t A_HANDLE_MGR, A_HANDLE_GET;
 extern uintptr_t A_ACC_MANAGER, A_PLAYER_TABLE, A_WTM, A_WORLD_PTR, A_MENU_MGR;
 extern uintptr_t A_TEXLIST, A_TEXMAP_VT;
 extern uintptr_t A_POST_REGION, A_POST_GAME, A_OBJ_HANDLE, A_CUR_WORLD;
-extern uintptr_t A_FM_PATCH, A_REG_FUNC, A_SAVE_MGR;
+extern uintptr_t A_FM_PATCH, A_REG_FUNC, A_SAVE_MGR, A_LANGUAGE;
 extern int g_build;                  // 10 = DX10 exe, 9 = DX9 exe
 extern uint32_t g_regResume;         // A_REG_FUNC + 7 (used by the detour in texture_swap.c)
 int select_build(void);
@@ -63,6 +63,7 @@ extern void* g_afs;
 extern DWORD g_frame;
 extern ULONGLONG g_lastShow;
 extern double g_gapSec;
+extern int g_requireFocus;           // 1 = hotkeys and popups only work while the game window is active (RequireFocus in the ini)
 extern int g_soundDelay;
 extern char g_soundFile[MAX_PATH];
 extern int g_soundArmed;
@@ -90,6 +91,10 @@ uint32_t rdv(uintptr_t a);
 extern int g_key[3];                 // virtual-key codes: replay next earned, show earned-before-mod ones, reset history (0 = off)
 void ini_get(const char* sec, const char* key, const char* def, char* out, int n);
 void write_default_ini(void);
+void write_default_language_file(void);
+extern char g_langPath[MAX_PATH];     // the language file in use (empty = built-in English)
+void pick_language(void);
+void lang_get(const char* sec, const char* key, const char* def, char* out, int n);
 int parse_key(const char* n);
 void load_settings(void);
 

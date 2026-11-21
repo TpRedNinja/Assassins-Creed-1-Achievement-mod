@@ -45,6 +45,7 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID res) {
     CreateDirectoryA(g_mod, NULL);
     char sub[MAX_PATH]; snprintf(sub, sizeof sub, "%sPictures", g_mod); CreateDirectoryA(sub, NULL);
     snprintf(sub, sizeof sub, "%sSounds", g_mod); CreateDirectoryA(sub, NULL);
+    snprintf(sub, sizeof sub, "%sLanguages", g_mod); CreateDirectoryA(sub, NULL);
     CreateThread(NULL, 0, init_thread, NULL, 0, NULL);
   }
   return TRUE;

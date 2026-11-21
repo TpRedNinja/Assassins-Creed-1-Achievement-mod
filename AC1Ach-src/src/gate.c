@@ -4,7 +4,7 @@
 #include "ac1ach.h"
 
 // Is the game window the active window? (Hotkeys and popups only work then.)
-int in_game_focus(void) { DWORD pid = 0; GetWindowThreadProcessId(GetForegroundWindow(), &pid); return pid == GetCurrentProcessId(); }
+int in_game_focus(void) { if (!g_requireFocus) return 1; DWORD pid = 0; GetWindowThreadProcessId(GetForegroundWindow(), &pid); return pid == GetCurrentProcessId(); }
 
 // True only while playing as Altair with no menu, pause screen or loading in progress. Popups wait until this is true.
 int in_altair_gameplay(void) {

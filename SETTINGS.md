@@ -4,19 +4,25 @@ Everything you can change lives in `AC1Ach\AC1Ach.ini` (created on the first run
 
 ## What is read when
 
-- `[Settings]` is read once when the game starts. Close and reopen the game after changing it.
-- The `[00]` to `[44]` sections are read each time a popup shows. Changes there apply to the next popup, no restart needed.
+- `[Settings]` is read once when the game starts. Close and reopen the game after changing it (except `Language=`, which is read for every popup).
+- The language files (`[00]` to `[44]` sections) are read each time a popup shows. Changes there apply to the next popup, no restart needed.
 - Pictures are also loaded each time a popup shows, so replacing a picture file applies to the next popup.
 
-## Text (translations)
+## Language and text
 
-Each achievement has a section named by its slot number, `[00]` to `[44]`. `Title=` is the big line and `Description=` the small line of the popup. Change them to anything you like, in any language the game's font can draw. The default texts are the Xbox 360 ones, so the file is also the complete list of strings to translate. Delete a line to get its default back.
+The texts are not in `AC1Ach.ini` but in language files in `AC1Ach\Languages`, one per language (`AC1Ach_en.ini`, `AC1Ach_fr.ini`, ...). Shipped: English, Spanish, French, German, Italian, Russian and Polish.
+
+- `Language=auto` (default, under `[Settings]`) uses the language the game itself is set to (for Steam: the game's language in its properties). If there is no file for that language (Japanese, Korean, Czech), English is used.
+- To force another language, write its code (`en`, `es`, `fr`, `de`, `it`, `ru`, `pl`) or the file name from the `Languages` folder, for example `Language=es` or `Language=MyTranslation.ini`.
+- Each language file has a `[00]` to `[44]` section per achievement. `Title=` is the big line and `Description=` the small line of the popup. Edit them freely, save the file as UTF-8 (without BOM), keep the keys named `Title` and `Description`.
+- To add your own language: copy `AC1Ach_en.ini`, translate it, and set `Language=` to its file name. Language files are read for every popup, so changes apply to the next popup without a restart. The `Language=` line itself is also re-read for every popup.
+- A `Picture=` or `Sound=` line in a `[NN]` section of the language file overrides the default for that achievement. If a value is missing there, the same section in `AC1Ach.ini` is used, so an ini from v1.0 with its own `[NN]` sections keeps working for pictures and sounds (its titles are ignored while the language file has them).
 
 ## Sounds
 
 1. Put your `.wav` file in `AC1Ach\Sounds`.
 2. For every achievement: set `Sound=yourfile.wav` under `[Settings]`.
-3. For a single achievement: add `Sound=yourfile.wav` under that `[NN]` section. It wins over the default.
+3. For a single achievement: add `Sound=yourfile.wav` under that `[NN]` section of the language file. It wins over the default.
 4. `Sound=none` makes that achievement (or all of them, under `[Settings]`) silent.
 
 Write only the file name, not the path. The file must be a plain uncompressed (PCM) `.wav`; MP3 and other compressed formats will not play. If a file stays silent, re-save it as 16-bit PCM in an audio editor. `SoundDelayFrames=` (default 30) is how many frames after the picture appears the sound starts; raise it to start the sound later.
@@ -24,12 +30,14 @@ Write only the file name, not the path. The file must be a plain uncompressed (P
 ## Pictures
 
 - `AC1Ach\Pictures\NN.png` (`00` to `44`, the slot number) is used by default. Replace a file with your own picture under the same name; png, jpg, bmp and tga work (not WebP).
-- To use a differently named file for one achievement, add `Picture=name.png` under its `[NN]` section.
+- To use a differently named file for one achievement, add `Picture=name.png` under its `[NN]` section of the language file.
 - Any size works, the picture is scaled to fit 256 pixels high and centred. A larger picture looks sharper than a 64x64 one that gets enlarged. Square pictures work best.
 
 ## Timing
 
 `GapSeconds=` (default 9.5) is the minimum time between two popups, so a queue of achievements is shown one after another.
+
+`RequireFocus=` (default 1) makes the hotkeys and popups work only while the game window is the active window. If you play on Linux (Proton) or a setup where popups never show although the log says the hooks are installed, set `RequireFocus=0`.
 
 ## Hotkeys
 

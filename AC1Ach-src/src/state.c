@@ -11,6 +11,7 @@ void* g_afs = NULL;
 DWORD g_frame = 0;
 ULONGLONG g_lastShow = 0;
 double g_gapSec = 9.5;
+int g_requireFocus = 1;
 int g_soundDelay = 30;
 char g_soundFile[MAX_PATH] = "xbox360.wav";
 int g_soundArmed = 0;
