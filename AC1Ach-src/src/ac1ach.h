@@ -88,7 +88,7 @@ int wr32(uintptr_t a, uint32_t v);
 uint32_t rdv(uintptr_t a);
 
 // ---- config.c ----
-extern int g_key[3];                 // virtual-key codes: replay next earned, show earned-before-mod ones, reset history (0 = off)
+extern int g_key[5];                 // virtual-key codes: replay next earned, show earned-before-mod ones, reset history, DEV: popup all 44, DEV: popup the final one (0 = off)
 void ini_get(const char* sec, const char* key, const char* def, char* out, int n);
 void write_default_ini(void);
 void write_default_language_file(void);

@@ -19,11 +19,13 @@ static void pump(void* self) {
   if (!g_ready) { write_default_ini(); write_default_language_file(); load_settings(); g_ready = 1; logf_("pump started"); }
   if (g_frame % 60 == 1) check_save();
   if (in_game_focus()) {
-    static int was[3] = { 0, 0, 0 };
-    for (int k = 0; k < 3; k++) {
+    static int was[5] = { 0, 0, 0, 0, 0 };
+    for (int k = 0; k < 5; k++) {
       int d = g_key[k] && (GetAsyncKeyState(g_key[k]) & 0x8000) != 0;
       if (d && !was[k]) {
         if (k == 0) replay_next(); else if (k == 1) replay_new();
+        else if (k == 3) { logf_("DEV test: queue all %d achievements", NSLOTS); for (int s = 0; s < NSLOTS; s++) queue_slot(s); }   // shows every popup one after another, nothing is unlocked in the game
+        else if (k == 4) { logf_("DEV test: final achievement popup"); queue_slot(FINAL_SLOT); }
         else { char p[MAX_PATH]; if (hist_path(p, sizeof p, "shown.txt")) { DeleteFileA(p); write_earned_file(); logf_("shown.txt of save %s deleted (history reset)", g_save); } }
       }
       was[k] = d;

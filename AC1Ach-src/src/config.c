@@ -49,7 +49,7 @@ void lang_get(const char* sec, const char* key, const char* def, char* out, int 
   if (g_langPath[0]) GetPrivateProfileStringA(sec, key, "", out, n, g_langPath);
   if (!out[0]) ini_get(sec, key, def, out, n);
 }
-int g_key[3];                 // virtual-key codes: replay next earned, show earned-before-mod ones, reset history (0 = off)
+int g_key[5];                 // virtual-key codes: replay next earned, show earned-before-mod ones, reset history, DEV: popup all 44, DEV: popup the final one (0 = off)
 // Turns a key name from the ini ("F11", "INS", "A") into a Windows virtual-key code.
 int parse_key(const char* n) {
   if (!n[0] || !_stricmp(n, "none")) return 0;
@@ -71,9 +71,10 @@ void load_settings(void) {
   ini_get("Settings", "GapSeconds", "9.5", b, sizeof b); g_gapSec = atof(b);
   ini_get("Settings", "RequireFocus", "1", b, sizeof b); g_requireFocus = atoi(b) != 0;
   { char p[MAX_PATH]; snprintf(p, sizeof p, "%sAC1Ach.ini", g_mod); ini_get("Settings", "Language", "", b, sizeof b); if (!b[0]) WritePrivateProfileStringA("Settings", "Language", "auto", p); }   // older ini files get the new key
-  static const char* keyNames[3] = { "ReplayNextKey", "ReplayNewKey", "ResetHistoryKey" };
-  static const char* keyDefs[3] = { "F11", "F12", "F9" };
-  for (int i = 0; i < 3; i++) {
+  static const char* keyNames[5] = { "ReplayNextKey", "ReplayNewKey", "ResetHistoryKey", "TestKey", "FinalTestKey" };
+  static const char* keyDefs[5] = { "F11", "F12", "F9", "F10", "INS" };
+  logf_("DEV BUILD: TestKey (queue all 44 popups) and FinalTestKey (final popup) are active");
+  for (int i = 0; i < 5; i++) {
     ini_get("Settings", keyNames[i], "", b, sizeof b);
     if (i == 2 && !b[0]) {         // ResetHistoryKey deletes the save's popup history, so it ships switched off: only a commented-out example line is written
       char p[MAX_PATH], c[16]; snprintf(p, sizeof p, "%sAC1Ach.ini", g_mod); ini_get("Settings", "; ResetHistoryKey", "", c, sizeof c);
