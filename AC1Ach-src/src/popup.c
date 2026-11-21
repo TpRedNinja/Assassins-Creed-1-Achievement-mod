@@ -15,12 +15,20 @@ void make_wstr(MsWStr* w, const char* utf8) {
   w->size = len;
 }
 
+// Turns a written \n (backslash, n) in an ini text into a real line break, so a long description can be split over several lines.
+static void unescape_newlines(char* t) {
+  char* o = t;
+  for (const char* i = t; *i; i++) { if (i[0] == '\\' && i[1] == 'n') { *o++ = '\n'; i++; } else *o++ = *i; }
+  *o = 0;
+}
+
 // Shows the popup for one achievement: builds the game's message with our title, description and picture, queues it, starts the sound and records it in shown.txt.
 void show_popup(int slot) {
   char sec[8], title[256], desc[256]; snprintf(sec, sizeof sec, "%02d", slot);
   pick_language();
   lang_get(sec, "Title", DEF_TITLE[slot], title, sizeof title);
   lang_get(sec, "Description", DEF_DESC[slot], desc, sizeof desc);
+  unescape_newlines(desc);
   free(g_pix); g_pix = load_slot_picture(slot);
   if (!g_pix) logf_("slot %d: no picture found in Pictures (using the existing flag picture)", slot);
   MsWStr wt, wd; make_wstr(&wt, title); make_wstr(&wd, desc);
