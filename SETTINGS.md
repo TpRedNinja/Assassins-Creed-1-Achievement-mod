@@ -15,8 +15,36 @@ The texts are not in `AC1Ach.ini` but in language files in `AC1Ach\Languages`, o
 - `Language=auto` (default, under `[Settings]`) uses the language the game itself is set to (for Steam: the game's language in its properties). If there is no file for that language (Japanese, Korean, Czech), English is used.
 - To force another language, write its code (`en`, `es`, `fr`, `de`, `it`, `ru`, `pl`) or the file name from the `Languages` folder, for example `Language=es` or `Language=MyTranslation.ini`.
 - Each language file has a `[00]` to `[44]` section per achievement. `Title=` is the big line and `Description=` the small line of the popup. Edit them freely, save the file as UTF-8 (without BOM), keep the keys named `Title` and `Description`.
-- To add your own language: copy `AC1Ach_en.ini`, translate it, and set `Language=` to its file name. Language files are read for every popup, so changes apply to the next popup without a restart. The `Language=` line itself is also re-read for every popup.
+- To add your own language: copy `AC1Ach_en.ini`, translate it, and put it in `Languages` (see "Adding a language" below). Language files are read for every popup, so changes apply to the next popup without a restart. The `Language=` line itself is also re-read for every popup.
 - A `Picture=` or `Sound=` line in a `[NN]` section of the language file overrides the default for that achievement. If a value is missing there, the same section in `AC1Ach.ini` is used, so an ini from v1.0 with its own `[NN]` sections keeps working for pictures and sounds (its titles are ignored while the language file has them).
+
+### Adding a language
+
+`Language=` takes a code or a file name; the mod looks for the first of these that exists and uses it (`<value>` is what you wrote after `Language=`):
+
+1. `Languages\AC1Ach_<value>.ini`
+2. `Languages\<value>.ini`
+3. `Languages\<value>` (the exact text, for example `Language=MyTranslation.ini`)
+4. `<value>` in the `AC1Ach` folder itself
+
+So `Language=pl` loads `AC1Ach_pl.ini`, and a file called `AC1Ach_english.ini` loads with `Language=english`. If nothing is found the mod uses English.
+
+For a translation to be picked up **without setting anything**, name it with the code of the game language it is for. With `Language=auto` the mod looks for:
+
+| Game language | File |
+| --- | --- |
+| English | `AC1Ach_en.ini` |
+| French | `AC1Ach_fr.ini` |
+| Spanish | `AC1Ach_es.ini` |
+| German | `AC1Ach_de.ini` |
+| Italian | `AC1Ach_it.ini` |
+| Japanese | `AC1Ach_ja.ini` |
+| Korean | `AC1Ach_ko.ini` |
+| Russian | `AC1Ach_ru.ini` |
+| Czech | `AC1Ach_cs.ini` |
+| Polish | `AC1Ach_pl.ini` |
+
+A file with any other name still works, but the player has to set `Language=` to it. If you delete `AC1Ach_en.ini` the mod writes a new default one. The file must be UTF-8 without BOM and the keys must stay named `Title` and `Description`. Whether the game's font can draw a script (Japanese, Korean) has not been tested.
 
 ## Sounds
 
