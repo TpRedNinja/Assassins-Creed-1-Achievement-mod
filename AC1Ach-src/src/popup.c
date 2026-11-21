@@ -18,8 +18,9 @@ void make_wstr(MsWStr* w, const char* utf8) {
 // Shows the popup for one achievement: builds the game's message with our title, description and picture, queues it, starts the sound and records it in shown.txt.
 void show_popup(int slot) {
   char sec[8], title[256], desc[256]; snprintf(sec, sizeof sec, "%02d", slot);
-  ini_get(sec, "Title", DEF_TITLE[slot], title, sizeof title);
-  ini_get(sec, "Description", DEF_DESC[slot], desc, sizeof desc);
+  pick_language();
+  lang_get(sec, "Title", DEF_TITLE[slot], title, sizeof title);
+  lang_get(sec, "Description", DEF_DESC[slot], desc, sizeof desc);
   free(g_pix); g_pix = load_slot_picture(slot);
   if (!g_pix) logf_("slot %d: no picture found in Pictures (using the existing flag picture)", slot);
   MsWStr wt, wd; make_wstr(&wt, title); make_wstr(&wd, desc);
@@ -43,7 +44,7 @@ void show_popup(int slot) {
   if (wt.cap > 7) free(wt.u.ptr);
   if (wd.cap > 7) free(wd.u.ptr);
   // sound
-  char sn[MAX_PATH]; ini_get(sec, "Sound", "", sn, sizeof sn); if (!sn[0]) snprintf(sn, sizeof sn, "%s", g_soundFile);
+  char sn[MAX_PATH]; lang_get(sec, "Sound", "", sn, sizeof sn); if (!sn[0]) snprintf(sn, sizeof sn, "%s", g_soundFile);
   if (_stricmp(sn, "none") != 0) { snprintf(g_soundPath, sizeof g_soundPath, "%sSounds\\%s", g_mod, sn); g_soundArmed = 1; }
   if (g_firstSwap || !g_pix) { g_soundCountdown = g_soundArmed ? g_soundDelay + 1 : 0; g_soundArmed = 0; }   // picture resident (or none): start now, else when the game registers the picture
   g_lastShow = GetTickCount64();

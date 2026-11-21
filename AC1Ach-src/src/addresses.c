@@ -19,6 +19,7 @@ uintptr_t A_OBJ_HANDLE;                                           // thiscall(mg
 uintptr_t A_CUR_WORLD;                                            // cdecl() -> current world handle
 uintptr_t A_FM_PATCH;                                             // FreeMission completion: push 0 / push 0F4h / call PostGameEvent ... (54 bytes, replaced)
 uintptr_t A_REG_FUNC;                                             // TextureMap register function; first 7 bytes are 64 8B 15 2C 00 00 00
+uintptr_t A_LANGUAGE;                                             // int: the game's language id (1 English, 2 French, 3 Spanish, 4 German, 5 Italian, 6 Japanese, 7 Korean, 8 Russian, 9 Czech, 10 Polish)
 uintptr_t A_SAVE_MGR;                                             // [x] = SaveGameManager, +0x9C = SaveGameWriter, +0x1C = current save file name (no ".sav")
 int g_build = 0;                                                  // 10 = DX10 exe, 9 = DX9 exe
 uint32_t g_regResume = 0;                                                // A_REG_FUNC + 7 (used by the detour)
@@ -34,7 +35,7 @@ int select_build(void) {
     A_ACC_MANAGER = 0x0199EA18; A_PLAYER_TABLE = 0x0199FE30; A_WTM = 0x0199EC00; A_WORLD_PTR = 0x029C2EE8; A_MENU_MGR = 0x0199E900;
     A_TEXLIST = 0x019A0F54; A_TEXMAP_VT = 0x016AD2AC;
     A_POST_REGION = 0x00FD4BE0; A_POST_GAME = 0x00FD4AF0; A_OBJ_HANDLE = 0x008EE990; A_CUR_WORLD = 0x004586B0; A_FM_PATCH = 0x00E14899;
-    A_REG_FUNC = 0x00844B30; A_SAVE_MGR = 0x029A335C;
+    A_REG_FUNC = 0x00844B30; A_SAVE_MGR = 0x029A335C; A_LANGUAGE = 0x018EB93C;
     return g_build = 10;
   }
   if (rd32(0x016FE938, &v) && v == 0x00D47110) {            // DX9
@@ -45,7 +46,7 @@ int select_build(void) {
     A_ACC_MANAGER = 0x01A11A68; A_PLAYER_TABLE = 0x01A12FB0; A_WTM = 0x01A11BF0; A_WORLD_PTR = 0x01A29F58; A_MENU_MGR = 0x01A28450;
     A_TEXLIST = 0; A_TEXMAP_VT = 0x016C0C00;
     A_POST_REGION = 0x00D5F080; A_POST_GAME = 0x00D5EF90; A_OBJ_HANDLE = 0x0090E500; A_CUR_WORLD = 0x00419880; A_FM_PATCH = 0x00C408D9;
-    A_REG_FUNC = 0x00A64070; A_SAVE_MGR = 0x01A1E2CC;
+    A_REG_FUNC = 0x00A64070; A_SAVE_MGR = 0x01A1E2CC; A_LANGUAGE = 0x0192D48C;
     return g_build = 9;
   }
   return 0;

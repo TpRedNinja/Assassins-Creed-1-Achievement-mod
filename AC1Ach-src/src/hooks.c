@@ -16,7 +16,7 @@ unsigned char __fastcall hook_isactive(void* self) {
 // Runs every game frame (from hook_update): hotkeys, sound timing, picture swapping and starting the next queued popup.
 static void pump(void* self) {
   g_afs = self; g_frame++;
-  if (!g_ready) { write_default_ini(); load_settings(); g_ready = 1; logf_("pump started"); }
+  if (!g_ready) { write_default_ini(); write_default_language_file(); load_settings(); g_ready = 1; logf_("pump started"); }
   if (g_frame % 60 == 1) check_save();
   if (in_game_focus()) {
     static int was[3] = { 0, 0, 0 };
